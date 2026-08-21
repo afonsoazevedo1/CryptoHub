@@ -64,7 +64,7 @@ CMC_API_KEY=sua_chave_aqui
 
  **Observação**: o endpoint de exchanges (`/v1/exchange/info`) pode exigir um plano pago da CoinMarketCap. Caso sua chave não tenha acesso, isso está documentado na seção [Limitações conhecidas](#-limitações-conhecidas).
 
-## ▶️ Como rodar
+## Como rodar
 
 ```bash
 git clone <url-do-repositorio>
