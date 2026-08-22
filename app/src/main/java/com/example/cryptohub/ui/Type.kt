@@ -1,4 +1,4 @@
-package com.example.cryptohub.ui.theme
+package com.example.cryptohub.ui
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
