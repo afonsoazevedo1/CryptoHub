@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.cryptohub.R
 import com.example.cryptohub.domain.models.ExchangeDetail
+import com.example.cryptohub.presentation.components.ErrorView
 import com.example.cryptohub.presentation.components.ExchangeListLoadingShimmer
 import java.text.NumberFormat
 import java.util.Locale
@@ -73,12 +73,9 @@ fun ExchangeDetailScreen(
                     ExchangeListLoadingShimmer()
                 }
                 uiState.value.error != null -> {
-                    ErrorContent(
-                        error = uiState.value.error ?: stringResource(R.string.error_unknown),
-                        onRetry = {
-                            val exchangeId = viewModel.uiState.value.exchange?.id ?: return@ErrorContent
-                            viewModel.loadExchangeDetail(exchangeId)
-                        }
+                    ErrorView(
+                        message = uiState.value.error ?: stringResource(R.string.error_unknown),
+                        onRetry = { viewModel.loadExchangeDetail() }
                     )
                 }
                 uiState.value.exchange != null -> {
@@ -267,29 +264,7 @@ private fun ExchangeDetailContent(exchange: ExchangeDetail) {
     }
 }
 
-@Composable
-private fun ErrorContent(
-    error: String,
-    onRetry: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = error,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        Button(onClick = onRetry) {
-            Text(stringResource(R.string.btn_retry))
-        }
-    }
-}
-
+// Remove local ErrorContent
 private fun formatUSD(value: Double): String {
     return NumberFormat.getCurrencyInstance(Locale.US).format(value)
 }

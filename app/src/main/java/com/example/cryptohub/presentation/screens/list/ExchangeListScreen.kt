@@ -40,6 +40,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.cryptohub.R
 import com.example.cryptohub.domain.models.ExchangeListItem
+import com.example.cryptohub.presentation.components.EmptyView
+import com.example.cryptohub.presentation.components.ErrorView
 import com.example.cryptohub.presentation.components.ExchangeListLoadingShimmer
 import java.text.NumberFormat
 import java.util.Locale
@@ -77,13 +79,13 @@ fun ExchangeListScreen(
                     ExchangeListLoadingShimmer()
                 }
                 uiState.value.error != null -> {
-                    ErrorContent(
-                        error = uiState.value.error ?: stringResource(R.string.error_unknown),
+                    ErrorView(
+                        message = uiState.value.error ?: stringResource(R.string.error_unknown),
                         onRetry = { viewModel.loadExchanges() }
                     )
                 }
                 uiState.value.exchanges.isEmpty() -> {
-                    EmptyContent()
+                    EmptyView()
                 }
                 else -> {
                     ExchangesList(
@@ -181,45 +183,7 @@ private fun ExchangeListItemCard(
     }
 }
 
-@Composable
-private fun ErrorContent(
-    error: String,
-    onRetry: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = error,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        Button(onClick = onRetry) {
-            Text(stringResource(R.string.btn_retry))
-        }
-    }
-}
-
-@Composable
-private fun EmptyContent() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(R.string.empty_list),
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
-
+// Remove local ErrorContent and EmptyContent functions
 private fun formatUSD(value: Double): String {
     return NumberFormat.getCurrencyInstance(Locale.US).format(value)
 }
