@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.example.cryptohub.presentation.screens.detail.ExchangeDetailScreen
 import com.example.cryptohub.presentation.screens.list.ExchangeListScreen
 
@@ -11,24 +12,17 @@ import com.example.cryptohub.presentation.screens.list.ExchangeListScreen
 fun AppNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = "list"
+        startDestination = Routes.ExchangeList
     ) {
-        composable("list") {
+        composable<Routes.ExchangeList> {
             ExchangeListScreen(
                 onExchangeClick = { exchangeId ->
-                    navController.navigate("detail/$exchangeId")
+                    navController.navigate(Routes.ExchangeDetail(exchangeId))
                 }
             )
         }
 
-        composable(
-            route = "detail/{exchangeId}",
-            arguments = listOf(
-                androidx.navigation.navArgument("exchangeId") {
-                    type = androidx.navigation.NavType.IntType
-                }
-            )
-        ) { backStackEntry ->
+        composable<Routes.ExchangeDetail> {
             ExchangeDetailScreen(
                 onNavigateBack = {
                     navController.popBackStack()
