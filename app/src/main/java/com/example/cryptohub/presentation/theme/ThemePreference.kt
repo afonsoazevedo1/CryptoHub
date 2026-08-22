@@ -1,27 +1,23 @@
 package com.example.cryptohub.presentation.theme
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "theme_preferences")
-
-class ThemePreference(private val context: Context) {
+class ThemePreference(private val dataStore: DataStore<Preferences>) {
     companion object {
         private val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
     }
 
-    val isDarkModeFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
+    val isDarkModeFlow: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[IS_DARK_MODE] ?: false
     }
 
     suspend fun setDarkMode(isDark: Boolean) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[IS_DARK_MODE] = isDark
         }
     }
