@@ -3,45 +3,29 @@ package com.example.cryptohub
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.cryptohub.ui.theme.CryptoHubTheme
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.collectAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.cryptohub.presentation.navigation.AppNavGraph
+import com.example.cryptohub.presentation.theme.CryptoHubTheme
+import com.example.cryptohub.presentation.theme.ThemePreference
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private lateinit var themePreference: ThemePreference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        themePreference = ThemePreference(this)
+
         setContent {
-            CryptoHubTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            val isDarkMode = themePreference.isDarkModeFlow.collectAsState(initial = isSystemInDarkTheme())
+            val navController = rememberNavController()
+
+            CryptoHubTheme(darkTheme = isDarkMode.value) {
+                AppNavGraph(navController = navController)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CryptoHubTheme {
-        Greeting("Android")
     }
 }

@@ -1,3 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CryptoHub</string>
+
+    <!-- Erros de Rede -->
+    <string name="error_network">Falha de conexão. Verifique sua internet.</string>
+    <string name="error_timeout">Requisição expirou. Tente novamente.</string>
+    <string name="error_no_data">Nenhum dado disponível</string>
+    <string name="error_unknown">Algo deu errado. Tente novamente.</string>
+    <string name="error_server">Erro no servidor. Tente novamente.</string>
+    <string name="error_validation">Dados inválidos</string>
+
+    <!-- Botões -->
+    <string name="btn_retry">Tentar novamente</string>
+    <string name="btn_back">Voltar</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancelar</string>
+
+    <!-- Estados -->
+    <string name="loading">Carregando...</string>
+    <string name="empty_list">Nenhuma exchange encontrada</string>
+
+    <!-- Tela de Listagem -->
+    <string name="title_exchanges">Exchanges</string>
+    <string name="label_volume">Volume</string>
+    <string name="label_launched">Lançamento</string>
+    <string name="volume_format">Volume: %s</string>
+
+    <!-- Tela de Detalhe -->
+    <string name="title_exchange_detail">Detalhes da Exchange</string>
+    <string name="label_description">Descrição</string>
+    <string name="label_website">Website</string>
+    <string name="label_maker_fee">Taxa de Maker</string>
+    <string name="label_taker_fee">Taxa de Taker</string>
+    <string name="label_cryptocurrencies">Criptomoedas</string>
+    <string name="label_price">Preço (USD)</string>
+
+    <!-- Tema -->
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="theme_system">Padrão do Sistema</string>
 </resources>
