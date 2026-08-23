@@ -7,5 +7,10 @@ sealed interface Routes {
     data object ExchangeList : Routes
 
     @Serializable
-    data class ExchangeDetail(val exchangeId: Int) : Routes
+    data class ExchangeDetail(
+        val id: Int,
+        val name: String,
+        val volume: Double,
+        val dateLaunched: String?
+    ) : Routes
 }
