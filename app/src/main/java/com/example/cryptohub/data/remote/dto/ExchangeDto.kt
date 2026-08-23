@@ -16,6 +16,8 @@ data class ExchangeDto(
     @SerialName("spot_volume_usd")
     val spotVolumeUsd: Double? = null,
     @SerialName("first_historical_data")
+    val firstHistoricalData: String? = null,
+    @SerialName("date_launched")
     val dateLaunched: String? = null,
     @SerialName("description")
     val description: String? = null,
@@ -24,7 +26,17 @@ data class ExchangeDto(
     @SerialName("maker_fee")
     val makerFee: Double? = null,
     @SerialName("taker_fee")
-    val takerFee: Double? = null
+    val takerFee: Double? = null,
+    @SerialName("quote")
+    val quote: Map<String, ExchangeQuoteDto>? = null
+)
+
+@Serializable
+data class ExchangeQuoteDto(
+    @SerialName("volume_24h")
+    val volume24h: Double? = null,
+    @SerialName("volume_24h_adjusted")
+    val volume24hAdjusted: Double? = null
 )
 
 @Serializable

@@ -5,10 +5,10 @@ import com.example.cryptohub.domain.models.Coin
 
 fun ExchangeAssetDto.toCoin(): Coin {
     return Coin(
-        id = currency.id,
+        id = currency.id ?: 0,
         name = currency.name,
-        symbol = currency.symbol,
-        priceUsd = quote?.get("USD")?.price
+        symbol = currency.symbol ?: "",
+        priceUsd = currency.priceUsd ?: quote?.get("USD")?.price
     )
 }
 

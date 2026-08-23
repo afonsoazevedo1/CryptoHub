@@ -6,11 +6,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CoinDto(
     @SerialName("id")
-    val id: Int,
+    val id: Int? = null,
     @SerialName("name")
     val name: String,
     @SerialName("symbol")
-    val symbol: String
+    val symbol: String? = null,
+    @SerialName("price_usd")
+    val priceUsd: Double? = null
 )
 
 @Serializable

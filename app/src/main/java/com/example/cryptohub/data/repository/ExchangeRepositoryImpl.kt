@@ -18,6 +18,7 @@ import com.example.cryptohub.domain.repository.ExchangeRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.resources.get
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -32,6 +33,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class ExchangeRepositoryImpl(
     private val client: HttpClient,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ExchangeRepository {
 
     companion object {
@@ -45,27 +47,51 @@ class ExchangeRepositoryImpl(
     override fun getExchanges(start: Int, limit: Int): Flow<Result<List<ExchangeListItem>>> = flow {
         emit(Result.Loading)
 
-        val exchanges = retryWithExponentialBackoff {
-            val response = client.get(ExchangeMapResource(start = start, limit = limit))
+        // 1. Get the list of exchanges (ID, Name, etc)
+        val mapResponse = retryWithExponentialBackoff {
+            client.get(ExchangeMapResource(start = start, limit = limit))
                 .body<ExchangeListResponse>()
-            response.data.map { it.toExchangeListItem() }
+        }
+        
+        val exchangeIds = mapResponse.data.joinToString(",") { it.id.toString() }
+        
+        // 2. Get detailed info (including volume) for all IDs in one batch
+        val infoResponse = retryWithExponentialBackoff {
+            client.get(ExchangeInfoResource(id = exchangeIds))
+                .body<ExchangeDetailResponse>()
+        }
+
+        // 3. Merge data
+        val exchanges = mapResponse.data.map { mapDto ->
+            val detailDto = infoResponse.data[mapDto.id.toString()]
+            
+            // Prioritize volume from info response
+            val volume = detailDto?.spotVolumeUsd 
+                ?: detailDto?.volume24h 
+                ?: mapDto.spotVolumeUsd 
+                ?: 0.0
+                
+            mapDto.toExchangeListItem().copy(
+                spotVolumeUsd = volume,
+                logo = detailDto?.logo ?: mapDto.logo ?: "https://s2.coinmarketcap.com/static/img/exchanges/64x64/${mapDto.id}.png"
+            )
         }
 
         emit(Result.Success(exchanges))
-    }.handleErrors().flowOn(Dispatchers.IO)
+    }.handleErrors().flowOn(ioDispatcher)
 
     override fun getExchangeDetail(exchangeId: Int): Flow<Result<ExchangeDetail>> = flow {
         emit(Result.Loading)
 
         coroutineScope {
-            val exchangeDeferred = async {
+            val exchangeDeferred = async(ioDispatcher) {
                 retryWithExponentialBackoff {
-                    client.get(ExchangeInfoResource(id = exchangeId))
+                    client.get(ExchangeInfoResource(id = exchangeId.toString()))
                         .body<ExchangeDetailResponse>()
                 }
             }
 
-            val coinsDeferred = async {
+            val coinsDeferred = async(ioDispatcher) {
                 try {
                     retryWithExponentialBackoff {
                         client.get(ExchangeAssetsResource(id = exchangeId))
@@ -125,9 +151,13 @@ class ExchangeRepositoryImpl(
     }
 
     private fun <T> Flow<Result<T>>.handleErrors(): Flow<Result<T>> = catch { e ->
+        Log.e(TAG, "Error in repository: ${e.message}", e)
         val error = when (e) {
             is SocketTimeoutException -> ErrorType.TimeoutError(e.message ?: "Timeout")
             is IOException -> ErrorType.NetworkError(e.message ?: "Network error")
+            is io.ktor.client.plugins.ResponseException -> {
+                ErrorType.ServerError(e.response.status.value, e.message ?: "Server error")
+            }
             else -> ErrorType.UnknownError(e.message ?: "Unknown error")
         }
         emit(Result.Error(error))

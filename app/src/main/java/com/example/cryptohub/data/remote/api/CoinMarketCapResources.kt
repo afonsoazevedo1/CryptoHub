@@ -15,7 +15,7 @@ data class ExchangeMapResource(
 @Serializable
 @Resource("/v1/exchange/info")
 data class ExchangeInfoResource(
-    val id: Int
+    val id: String
 )
 
 @Serializable
