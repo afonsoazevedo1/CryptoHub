@@ -1,60 +1,36 @@
 package com.example.cryptohub.presentation.theme
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 
-val md_theme_light_primary = Color(0xFF006DB3)
-val md_theme_light_onPrimary = Color(0xFFFFFFFF)
-val md_theme_light_primaryContainer = Color(0xFFD1E4FF)
-val md_theme_light_onPrimaryContainer = Color(0xFF001D3B)
-val md_theme_light_secondary = Color(0xFF536E7F)
-val md_theme_light_onSecondary = Color(0xFFFFFFFF)
-val md_theme_light_secondaryContainer = Color(0xFFD7E8F7)
-val md_theme_light_onSecondaryContainer = Color(0xFF0F2940)
-val md_theme_light_tertiary = Color(0xFF6B5B7E)
-val md_theme_light_onTertiary = Color(0xFFFFFFFF)
-val md_theme_light_tertiaryContainer = Color(0xFFF2DAFF)
-val md_theme_light_onTertiaryContainer = Color(0xFF251635)
-val md_theme_light_error = Color(0xFFB3261E)
-val md_theme_light_onError = Color(0xFFFFFFFF)
-val md_theme_light_errorContainer = Color(0xFFF9DEDC)
-val md_theme_light_onErrorContainer = Color(0xFF410E0B)
-val md_theme_light_background = Color(0xFFFEFBFF)
-val md_theme_light_onBackground = Color(0xFF1C1B1F)
-val md_theme_light_surface = Color(0xFFFEFBFF)
-val md_theme_light_onSurface = Color(0xFF1C1B1F)
-val md_theme_light_surfaceVariant = Color(0xFFE7E0EC)
-val md_theme_light_onSurfaceVariant = Color(0xFF49454E)
-val md_theme_light_outline = Color(0xFF79747E)
-val md_theme_light_inverseOnSurface = Color(0xFFF4EFF4)
-val md_theme_light_inverseSurface = Color(0xFF313033)
+// Base Colors - Named Constants
+private const val HEX_CRYPTO_BLACK = 0xFF0B0E11
+private const val HEX_CRYPTO_DARK_GRAY = 0xFF181A20
+private const val HEX_CRYPTO_GREEN = 0xFF0ECB81
+private const val HEX_CRYPTO_BLUE = 0xFF4788FF
+private const val HEX_CRYPTO_TEXT_GRAY = 0xFF848E9C
+private const val HEX_CRYPTO_WHITE = 0xFFEAECEF
+private const val HEX_CRYPTO_LIGHT_SURFACE = 0xFFF5F5F5
+private const val HEX_CRYPTO_OUTLINE = 0xFF323539
 
-val md_theme_dark_primary = Color(0xFFA3C9FF)
-val md_theme_dark_onPrimary = Color(0xFF003A70)
-val md_theme_dark_primaryContainer = Color(0xFF00509E)
-val md_theme_dark_onPrimaryContainer = Color(0xFFD1E4FF)
-val md_theme_dark_secondary = Color(0xFFBBCCDB)
-val md_theme_dark_onSecondary = Color(0xFF253849)
-val md_theme_dark_secondaryContainer = Color(0xFF3D5064)
-val md_theme_dark_onSecondaryContainer = Color(0xFFD7E8F7)
-val md_theme_dark_tertiary = Color(0xFFD5BFFF)
-val md_theme_dark_onTertiary = Color(0xFF3B2A4D)
-val md_theme_dark_tertiaryContainer = Color(0xFF534167)
-val md_theme_dark_onTertiaryContainer = Color(0xFFF2DAFF)
-val md_theme_dark_error = Color(0xFFF2B8B5)
-val md_theme_dark_onError = Color(0xFF601410)
-val md_theme_dark_errorContainer = Color(0xFF8C1D18)
-val md_theme_dark_onErrorContainer = Color(0xFFF9DEDC)
-val md_theme_dark_background = Color(0xFF1C1B1F)
-val md_theme_dark_onBackground = Color(0xFFE6E1E6)
-val md_theme_dark_surface = Color(0xFF1C1B1F)
-val md_theme_dark_onSurface = Color(0xFFE6E1E6)
-val md_theme_dark_surfaceVariant = Color(0xFF49454E)
-val md_theme_dark_onSurfaceVariant = Color(0xFFCAC7D0)
-val md_theme_dark_outline = Color(0xFF938F99)
-val md_theme_dark_inverseOnSurface = Color(0xFF1C1B1F)
-val md_theme_dark_inverseSurface = Color(0xFFE6E1E6)
+val CryptoBlack = Color(HEX_CRYPTO_BLACK)
+val CryptoDarkGray = Color(HEX_CRYPTO_DARK_GRAY)
+val CryptoGreen = Color(HEX_CRYPTO_GREEN)
+val CryptoBlue = Color(HEX_CRYPTO_BLUE)
+val CryptoTextGray = Color(HEX_CRYPTO_TEXT_GRAY)
+val CryptoWhite = Color(HEX_CRYPTO_WHITE)
 
-// Accent colors
-val md_accent_gold = Color(0xFFD4A574)
-val md_accent_gold_light = Color(0xFFF4E4C1)
-val md_accent_gold_dark = Color(0xFFC89968)
+val md_theme_light_primary = CryptoBlue
+val md_theme_light_onPrimary = White
+val md_theme_light_background = White
+val md_theme_light_surface = Color(HEX_CRYPTO_LIGHT_SURFACE)
+val md_theme_light_onSurface = CryptoBlack
+
+val md_theme_dark_primary = CryptoBlue
+val md_theme_dark_onPrimary = White
+val md_theme_dark_secondary = CryptoGreen
+val md_theme_dark_background = CryptoBlack
+val md_theme_dark_surface = CryptoDarkGray
+val md_theme_dark_onSurface = CryptoWhite
+val md_theme_dark_onSurfaceVariant = CryptoTextGray
+val md_theme_dark_outline = Color(HEX_CRYPTO_OUTLINE)

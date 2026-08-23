@@ -7,21 +7,20 @@ import com.example.cryptohub.core.error.ErrorHandler
 import com.example.cryptohub.core.error.ErrorType
 import com.example.cryptohub.domain.models.ExchangeListItem
 import com.example.cryptohub.domain.usecase.GetExchangesUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class ExchangeListUiState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val exchanges: List<ExchangeListItem> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+    val endReached: Boolean = false,
+    val isPaginationLoading: Boolean = false
 )
 
-@HiltViewModel
-class ExchangeListViewModel @Inject constructor(
+class ExchangeListViewModel(
     private val getExchangesUseCase: GetExchangesUseCase,
     private val errorHandler: ErrorHandler
 ) : ViewModel() {
@@ -29,26 +28,54 @@ class ExchangeListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ExchangeListUiState())
     val uiState: StateFlow<ExchangeListUiState> = _uiState.asStateFlow()
 
+    private var currentStart = INITIAL_PAGE_START
+    private val pageSize = PAGE_SIZE
+
     init {
         loadExchanges()
     }
 
-    fun loadExchanges() {
+    fun loadExchanges(isNextPage: Boolean = false) {
+        if (_uiState.value.isLoading || _uiState.value.isPaginationLoading || _uiState.value.endReached) return
+
         viewModelScope.launch {
-            getExchangesUseCase().collect { result ->
+            getExchangesUseCase(start = currentStart, limit = pageSize).collect { result ->
                 _uiState.value = when (result) {
-                    is Result.Loading -> _uiState.value.copy(isLoading = true, error = null)
-                    is Result.Success -> _uiState.value.copy(
-                        isLoading = false,
-                        exchanges = result.data,
-                        error = null
-                    )
+                    is Result.Loading -> {
+                        if (isNextPage) {
+                            _uiState.value.copy(isPaginationLoading = true)
+                        } else {
+                            _uiState.value.copy(isLoading = true, error = null)
+                        }
+                    }
+                    is Result.Success -> {
+                        currentStart += pageSize
+                        _uiState.value.copy(
+                            isLoading = false,
+                            isPaginationLoading = false,
+                            exchanges = _uiState.value.exchanges + result.data,
+                            error = null,
+                            endReached = result.data.size < pageSize
+                        )
+                    }
                     is Result.Error -> _uiState.value.copy(
                         isLoading = false,
+                        isPaginationLoading = false,
                         error = errorHandler.getErrorMessage(result.exception as? ErrorType ?: ErrorType.UnknownError())
                     )
                 }
             }
         }
+    }
+
+    fun refresh() {
+        currentStart = INITIAL_PAGE_START
+        _uiState.value = ExchangeListUiState()
+        loadExchanges()
+    }
+
+    companion object {
+        private const val INITIAL_PAGE_START = 1
+        private const val PAGE_SIZE = 20
     }
 }

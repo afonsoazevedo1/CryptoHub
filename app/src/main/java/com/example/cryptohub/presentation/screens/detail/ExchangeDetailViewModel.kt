@@ -10,12 +10,11 @@ import com.example.cryptohub.core.error.ErrorType
 import com.example.cryptohub.domain.models.ExchangeDetail
 import com.example.cryptohub.domain.usecase.GetExchangeDetailUseCase
 import com.example.cryptohub.presentation.navigation.Routes
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class ExchangeDetailUiState(
     val isLoading: Boolean = true,
@@ -23,24 +22,43 @@ data class ExchangeDetailUiState(
     val error: String? = null
 )
 
-@HiltViewModel
-class ExchangeDetailViewModel @Inject constructor(
+class ExchangeDetailViewModel(
     private val getExchangeDetailUseCase: GetExchangeDetailUseCase,
     private val errorHandler: ErrorHandler,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ExchangeDetailUiState())
-    val uiState: StateFlow<ExchangeDetailUiState> = _uiState.asStateFlow()
+    private val route: Routes.ExchangeDetail = savedStateHandle.toRoute<Routes.ExchangeDetail>()
+    private val exchangeId: Int = route.id
+    private var fetchJob: Job? = null
 
-    private val exchangeId: Int = savedStateHandle.toRoute<Routes.ExchangeDetail>().exchangeId
+    val initialExchange = ExchangeDetail(
+        id = route.id,
+        name = route.name,
+        logo = null,
+        description = null,
+        website = null,
+        makerFee = null,
+        takerFee = null,
+        dateLaunched = route.dateLaunched,
+        currencies = emptyList()
+    )
+
+    private val _uiState = MutableStateFlow(ExchangeDetailUiState(exchange = initialExchange))
+    val uiState: StateFlow<ExchangeDetailUiState> = _uiState.asStateFlow()
 
     init {
         loadExchangeDetail(exchangeId)
     }
 
     fun loadExchangeDetail(id: Int = exchangeId) {
-        viewModelScope.launch {
+        // Evita chamadas duplicadas se já estiver carregando o mesmo ID
+        if (_uiState.value.isLoading &&
+            fetchJob?.isActive == true &&
+            _uiState.value.exchange?.description != null) return
+
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
             getExchangeDetailUseCase(id).collect { result ->
                 _uiState.value = when (result) {
                     is Result.Loading -> _uiState.value.copy(isLoading = true, error = null)
