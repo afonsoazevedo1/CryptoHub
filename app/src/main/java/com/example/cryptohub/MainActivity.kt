@@ -4,30 +4,33 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.cryptohub.presentation.navigation.AppNavGraph
 import com.example.cryptohub.presentation.theme.CryptoHubTheme
 import com.example.cryptohub.presentation.theme.ThemePreference
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var themePreference: ThemePreference
+    private val themePreference: ThemePreference by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         setContent {
-            val isDarkMode = themePreference.isDarkModeFlow.collectAsState(initial = isSystemInDarkTheme())
+            val systemInDarkTheme = isSystemInDarkTheme()
+            val isDarkModePref = themePreference.isDarkModeFlow.collectAsState(initial = null)
+
+            // Se a preferência for nula, obedece ao sistema. Caso contrário, usa a preferência.
+            val darkTheme = isDarkModePref.value ?: systemInDarkTheme
             val navController = rememberNavController()
 
-            CryptoHubTheme(darkTheme = isDarkMode.value) {
+            CryptoHubTheme(darkTheme = darkTheme) {
                 AppNavGraph(navController = navController)
             }
         }
