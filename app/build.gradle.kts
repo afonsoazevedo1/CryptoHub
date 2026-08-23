@@ -73,6 +73,14 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+        }
+    }
 }
 
 dependencies {
@@ -119,11 +127,13 @@ dependencies {
     testImplementation(libs.truth)
     testImplementation(libs.koin.test)
     testImplementation(libs.ktor.client.mock)
+    testImplementation(libs.robolectric)
 
     // Testes instrumentados / UI
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.navigation.testing)
     debugImplementation(libs.ui.test.manifest)
 }
