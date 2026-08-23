@@ -9,8 +9,8 @@ fun ExchangeDto.toExchangeListItem(): ExchangeListItem {
     return ExchangeListItem(
         id = id,
         name = name,
-        logo = logo,
-        spotVolumeUsd = spotVolumeUsd,
+        logo = logo ?: "https://s2.coinmarketcap.com/static/img/exchanges/64x64/$id.png",
+        spotVolumeUsd = volume24h ?: spotVolumeUsd ?: 0.0,
         dateLaunched = dateLaunched
     )
 }
@@ -19,7 +19,7 @@ fun ExchangeDto.toExchangeDetail(coins: List<Coin> = emptyList()): ExchangeDetai
     return ExchangeDetail(
         id = id,
         name = name,
-        logo = logo,
+        logo = logo ?: "https://s2.coinmarketcap.com/static/img/exchanges/64x64/$id.png",
         description = description,
         website = urls?.website?.firstOrNull(),
         makerFee = makerFee,

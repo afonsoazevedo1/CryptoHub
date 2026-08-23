@@ -10,13 +10,25 @@ data class CoinDto(
     @SerialName("name")
     val name: String,
     @SerialName("symbol")
-    val symbol: String,
-    @SerialName("price_usd")
-    val priceUsd: Double
+    val symbol: String
+)
+
+@Serializable
+data class AssetQuoteDto(
+    @SerialName("price")
+    val price: Double? = null
+)
+
+@Serializable
+data class ExchangeAssetDto(
+    @SerialName("currency")
+    val currency: CoinDto,
+    @SerialName("quote")
+    val quote: Map<String, AssetQuoteDto>? = null
 )
 
 @Serializable
 data class CoinListResponse(
     @SerialName("data")
-    val data: List<CoinDto>
+    val data: List<ExchangeAssetDto>? = emptyList()
 )

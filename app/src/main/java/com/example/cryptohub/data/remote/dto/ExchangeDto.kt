@@ -11,9 +11,11 @@ data class ExchangeDto(
     val name: String,
     @SerialName("logo")
     val logo: String? = null,
+    @SerialName("volume_24h")
+    val volume24h: Double? = null,
     @SerialName("spot_volume_usd")
-    val spotVolumeUsd: Double,
-    @SerialName("date_launched")
+    val spotVolumeUsd: Double? = null,
+    @SerialName("first_historical_data")
     val dateLaunched: String? = null,
     @SerialName("description")
     val description: String? = null,
@@ -34,11 +36,11 @@ data class UrlsDto(
 @Serializable
 data class ExchangeListResponse(
     @SerialName("data")
-    val data: Map<String, ExchangeDto>
+    val data: List<ExchangeDto>
 )
 
 @Serializable
 data class ExchangeDetailResponse(
     @SerialName("data")
-    val data: ExchangeDto
+    val data: Map<String, ExchangeDto>
 )

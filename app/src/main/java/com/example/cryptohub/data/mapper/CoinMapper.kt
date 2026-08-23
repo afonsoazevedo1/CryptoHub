@@ -1,18 +1,17 @@
 package com.example.cryptohub.data.mapper
 
-import com.example.cryptohub.data.remote.dto.CoinDto
+import com.example.cryptohub.data.remote.dto.ExchangeAssetDto
 import com.example.cryptohub.domain.models.Coin
-import kotlin.collections.map
 
-fun CoinDto.toCoin(): Coin {
+fun ExchangeAssetDto.toCoin(): Coin {
     return Coin(
-        id = id,
-        name = name,
-        symbol = symbol,
-        priceUsd = priceUsd
+        id = currency.id,
+        name = currency.name,
+        symbol = currency.symbol,
+        priceUsd = quote?.get("USD")?.price
     )
 }
 
-fun List<CoinDto>.toCoinList(): List<Coin> {
+fun List<ExchangeAssetDto>.toCoinList(): List<Coin> {
     return map { it.toCoin() }
 }

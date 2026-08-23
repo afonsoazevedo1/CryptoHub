@@ -4,12 +4,10 @@ import com.example.cryptohub.core.Result
 import com.example.cryptohub.domain.models.ExchangeListItem
 import com.example.cryptohub.domain.repository.ExchangeRepository
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
-
-class GetExchangesUseCase @Inject constructor(
+class GetExchangesUseCase(
     private val repository: ExchangeRepository
 ) {
-    operator fun invoke(): Flow<Result<List<ExchangeListItem>>> {
-        return repository.getExchanges()
+    operator fun invoke(start: Int = 1, limit: Int = 20): Flow<Result<List<ExchangeListItem>>> {
+        return repository.getExchanges(start, limit)
     }
 }

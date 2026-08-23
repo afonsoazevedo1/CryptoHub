@@ -6,6 +6,6 @@ import com.example.cryptohub.domain.models.ExchangeListItem
 import kotlinx.coroutines.flow.Flow
 
 interface ExchangeRepository {
-    fun getExchanges(): Flow<Result<List<ExchangeListItem>>>
+    fun getExchanges(start: Int, limit: Int): Flow<Result<List<ExchangeListItem>>>
     fun getExchangeDetail(exchangeId: Int): Flow<Result<ExchangeDetail>>
 }
