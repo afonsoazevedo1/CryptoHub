@@ -25,6 +25,7 @@ import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.request.HttpSendPipeline
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
@@ -37,6 +38,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 val appModule = module {
     single { androidContext().dataStore }
+    single { Dispatchers.IO }
     singleOf(::ThemePreference)
     singleOf(::ErrorHandler)
 }
@@ -52,6 +54,7 @@ val networkModule = module {
                     }
                 )
             }
+            expectSuccess = true
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {

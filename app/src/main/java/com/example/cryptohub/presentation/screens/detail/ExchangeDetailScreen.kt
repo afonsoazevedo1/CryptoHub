@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.example.cryptohub.R
+import com.example.cryptohub.core.util.formatToBrazilianDate
 import com.example.cryptohub.core.util.formatUSD
 import com.example.cryptohub.domain.models.Coin
 import com.example.cryptohub.domain.models.ExchangeDetail
@@ -56,28 +57,6 @@ import com.example.cryptohub.presentation.components.CryptoPriceText
 import com.example.cryptohub.presentation.components.ErrorView
 import com.example.cryptohub.presentation.components.ExchangeListLoadingShimmer
 import org.koin.androidx.compose.koinViewModel
-
-private object DetailUIConstants {
-    val SCREEN_PADDING = 16.dp
-    val SECTION_SPACING = 24.dp
-    val HEADER_IMAGE_SIZE = 100.dp
-    val LOGO_SIZE = 70.dp
-    val HEADER_RADIUS = 24.dp
-    val CARD_RADIUS = 16.dp
-    val INFO_CARD_PADDING = 16.dp
-    val STAT_CARD_SPACING = 12.dp
-    const val LOGO_BG_ALPHA = 0.1f
-    const val WEBSITE_SURFACE_ALPHA = 0.1f
-    val WEBSITE_HORIZONTAL_PADDING = 12.dp
-    val WEBSITE_VERTICAL_PADDING = 6.dp
-    val ICON_SIZE = 14.dp
-    val SPACER_HEIGHT_SMALL = 4.dp
-    val SPACER_HEIGHT_MEDIUM = 12.dp
-    val SPACER_HEIGHT_LARGE = 16.dp
-    val SPACER_WIDTH = 6.dp
-    val BOTTOM_SPACER_HEIGHT = 32.dp
-    val LINE_HEIGHT = 22.sp
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -217,6 +196,12 @@ private fun ExchangeHeaderCard(
                 style = typography.bodySmall,
                 color = colorScheme.onSurfaceVariant
             )
+            
+            Text(
+                text = "Launch: ${exchange.dateLaunched?.formatToBrazilianDate() ?: "N/A"}",
+                style = typography.bodySmall,
+                color = colorScheme.onSurfaceVariant
+            )
 
             val website = exchange.website
             if (!website.isNullOrEmpty()) {
@@ -348,4 +333,26 @@ private fun AssetListItem(coin: Coin) {
             color = if (coin.priceUsd != null) colorScheme.secondary else colorScheme.onSurfaceVariant
         )
     }
+}
+
+private object DetailUIConstants {
+    val SCREEN_PADDING = 16.dp
+    val SECTION_SPACING = 24.dp
+    val HEADER_IMAGE_SIZE = 100.dp
+    val LOGO_SIZE = 70.dp
+    val HEADER_RADIUS = 24.dp
+    val CARD_RADIUS = 16.dp
+    val INFO_CARD_PADDING = 16.dp
+    val STAT_CARD_SPACING = 12.dp
+    const val LOGO_BG_ALPHA = 0.1f
+    const val WEBSITE_SURFACE_ALPHA = 0.1f
+    val WEBSITE_HORIZONTAL_PADDING = 12.dp
+    val WEBSITE_VERTICAL_PADDING = 6.dp
+    val ICON_SIZE = 14.dp
+    val SPACER_HEIGHT_SMALL = 4.dp
+    val SPACER_HEIGHT_MEDIUM = 12.dp
+    val SPACER_HEIGHT_LARGE = 16.dp
+    val SPACER_WIDTH = 6.dp
+    val BOTTOM_SPACER_HEIGHT = 32.dp
+    val LINE_HEIGHT = 22.sp
 }

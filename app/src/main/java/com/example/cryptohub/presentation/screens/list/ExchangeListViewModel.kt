@@ -76,6 +76,6 @@ class ExchangeListViewModel(
 
     companion object {
         private const val INITIAL_PAGE_START = 1
-        private const val PAGE_SIZE = 20
+        private const val PAGE_SIZE = 8
     }
 }

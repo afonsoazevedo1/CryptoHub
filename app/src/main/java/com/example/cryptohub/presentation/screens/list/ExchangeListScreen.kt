@@ -46,6 +46,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.cryptohub.R
+import com.example.cryptohub.R.drawable.ic_crypto_hub
+import com.example.cryptohub.core.util.formatToBrazilianDate
 import com.example.cryptohub.core.util.formatUSD
 import com.example.cryptohub.domain.models.ExchangeListItem
 import com.example.cryptohub.presentation.components.CryptoPriceText
@@ -53,20 +55,6 @@ import com.example.cryptohub.presentation.components.EmptyView
 import com.example.cryptohub.presentation.components.ErrorView
 import com.example.cryptohub.presentation.components.ExchangeListLoadingShimmer
 import org.koin.androidx.compose.koinViewModel
-
-private object ListUIConstants {
-    val SCREEN_PADDING = 16.dp
-    val ITEM_SPACING = 12.dp
-    val CARD_CORNER_RADIUS = 16.dp
-    val CARD_ELEVATION = 2.dp
-    val LOGO_CONTAINER_SIZE = 52.dp
-    const val LOGO_ALPHA = 0.2f
-    val PAGINATION_INDICATOR_SIZE = 24.dp
-    val PAGINATION_INDICATOR_STROKE = 2.dp
-    const val ANIMATION_OFFSET_FACTOR = 50
-    const val PRICE_FONT_SIZE = 14
-    const val DATE_TAKE_LENGTH = 10
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,7 +70,7 @@ fun ExchangeListScreen(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_crypto_hub),
+                            painter = painterResource(id = ic_crypto_hub),
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(32.dp)
@@ -220,7 +208,7 @@ private fun ExchangeListItemCard(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Launch: ${exchange.dateLaunched?.take(ListUIConstants.DATE_TAKE_LENGTH) ?: "N/A"}",
+                    text = "Launch: ${exchange.dateLaunched?.formatToBrazilianDate() ?: "N/A"}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -265,4 +253,17 @@ private fun ExchangeVolumeStat(volumeUsd: Double) {
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+}
+
+private object ListUIConstants {
+    val SCREEN_PADDING = 16.dp
+    val ITEM_SPACING = 12.dp
+    val CARD_CORNER_RADIUS = 16.dp
+    val CARD_ELEVATION = 2.dp
+    val LOGO_CONTAINER_SIZE = 52.dp
+    const val LOGO_ALPHA = 0.2f
+    val PAGINATION_INDICATOR_SIZE = 24.dp
+    val PAGINATION_INDICATOR_STROKE = 2.dp
+    const val ANIMATION_OFFSET_FACTOR = 50
+    const val PRICE_FONT_SIZE = 14
 }
