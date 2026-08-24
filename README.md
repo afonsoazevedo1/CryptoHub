@@ -6,8 +6,8 @@ O app consome a API da [CoinMarketCap](https://coinmarketcap.com/api/documentati
 
 ## Funcionalidades
 
-- **Listagem de exchanges**: exibe logo, nome, volume 24h (USD) e data de lançamento com suporte a **Paginação**.
-- **Detalhe da exchange**: exibe logo, nome, id, descrição, website clicável, taxas (maker/taker), data de lançamento e a lista de moedas negociadas com preço em USD.
+- **Listagem de exchanges**: exibe logo, nome, **Spot Volume (USD)** e data de lançamento com suporte a **Paginação com Shimmer**.
+- **Detalhe da exchange**: exibe logo, nome, id, descrição, website clicável, taxas (maker/taker), **Spot Volume** e a lista de moedas negociadas com preço em USD.
 - **Tema Dinâmico**: suporte automático a Dark e Light mode seguindo o sistema operacional.
 - **UX Instantânea**: passagem de dados via rota para renderização imediata do cabeçalho de detalhes.
 
@@ -76,6 +76,9 @@ cd CryptoHub
 # Testes unitários e lógica de negócio
 ./gradlew test
 
+# Testes instrumentados (UI e Navegação)
+./gradlew connectedAndroidTest
+
 # Análise estática de código
 ./gradlew detekt
 ```
@@ -86,7 +89,8 @@ cd CryptoHub
 - **Koin DSL**: Uso de `viewModelOf`, `singleOf` e `factoryOf` para reduzir boilerplate e facilitar a injeção.
 - **Resiliência Parcial**: A tela de detalhes carrega metadados mesmo se o endpoint de ativos falhar (comum em exchanges menores no CMC).
 - **Paralelismo**: Uso de `async/await` no repositório para carregar múltiplos endpoints simultaneamente.
-- **Polimento visual**: Customização de componentes para estética "Fintech/Crypto" com tipografia mono-espaçada para dados financeiros.
+- **Polimento visual**: Customização de componentes para estética "Fintech/Crypto" com tipografia mono-espaçada para dados financeiros e **inversão de separadores decimais/milhar** para o padrão brasileiro ($1.234,56).
+- **UX de Paginação**: Substituição de indicadores de progresso genéricos por **Shimmers**, garantindo uma transição visual suave durante o carregamento de novos dados.
 
 ## Sobre o desafio
 
