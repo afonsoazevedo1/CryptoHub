@@ -6,9 +6,9 @@ import com.example.cryptohub.domain.models.ExchangeDetail
 import com.example.cryptohub.domain.models.ExchangeListItem
 
 fun ExchangeDto.toExchangeListItem(): ExchangeListItem {
-    val volume = quote?.get("USD")?.volume24h 
+    val volume = spotVolumeUsd 
+        ?: quote?.get("USD")?.volume24h 
         ?: volume24h 
-        ?: spotVolumeUsd 
         ?: 0.0
         
     return ExchangeListItem(
@@ -29,7 +29,7 @@ fun ExchangeDto.toExchangeDetail(coins: List<Coin> = emptyList()): ExchangeDetai
         website = urls?.website?.firstOrNull(),
         makerFee = makerFee,
         takerFee = takerFee,
-        spotVolumeUsd = spotVolumeUsd,
+        spotVolumeUsd = spotVolumeUsd ?: quote?.get("USD")?.volume24h ?: volume24h,
         dateLaunched = dateLaunched ?: firstHistoricalData,
         currencies = coins
     )

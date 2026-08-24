@@ -8,5 +8,13 @@ import java.util.Locale
  * Example: 1234.56 -> $1,234.56
  */
 fun Double.formatUSD(): String {
-    return NumberFormat.getCurrencyInstance(Locale.US).format(this)
+    val formatter = NumberFormat.getCurrencyInstance(Locale.US).apply {
+        minimumFractionDigits = 2
+        maximumFractionDigits = 2
+    }
+    return formatter.format(this)
+        .replace(",", "TEMP")
+        .replace(".", ",")
+        .replace("TEMP", ".")
+        .replace(" ", "")
 }
