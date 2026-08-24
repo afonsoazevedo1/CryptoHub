@@ -79,7 +79,7 @@ val networkModule = module {
                         "-H \"$key: ${values.joinToString(", ")}\""
                     }
                     val curlCommand = "curl -X $method \"$url\" $headers"
-                    Log.d("CurlInterceptor", "🚀 REQUEST CURL:\n$curlCommand")
+                    Log.d("CurlInterceptor", "REQUEST CURL:\n$curlCommand")
                 }
             }
         }

@@ -10,7 +10,7 @@ sealed interface Routes {
     data class ExchangeDetail(
         val id: Int,
         val name: String,
-        val volume: Double,
+        val spotVolumeUsd: Double,
         val dateLaunched: String?
     ) : Routes
 }

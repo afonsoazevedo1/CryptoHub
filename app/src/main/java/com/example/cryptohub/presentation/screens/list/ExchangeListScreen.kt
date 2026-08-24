@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,6 +52,7 @@ import com.example.cryptohub.domain.models.ExchangeListItem
 import com.example.cryptohub.presentation.components.CryptoPriceText
 import com.example.cryptohub.presentation.components.EmptyView
 import com.example.cryptohub.presentation.components.ErrorView
+import com.example.cryptohub.presentation.components.ExchangeListItemShimmer
 import com.example.cryptohub.presentation.components.ExchangeListLoadingShimmer
 import org.koin.androidx.compose.koinViewModel
 
@@ -114,6 +114,7 @@ fun ExchangeListScreen(
                     exchanges = uiState.value.exchanges,
                     onExchangeClick = onExchangeClick,
                     isLoadingMore = uiState.value.isPaginationLoading,
+                    endReached = uiState.value.endReached,
                     onLoadMore = { viewModel.loadExchanges(isNextPage = true) }
                 )
             }
@@ -126,6 +127,7 @@ fun ExchangesList(
     exchanges: List<ExchangeListItem>,
     onExchangeClick: (ExchangeListItem) -> Unit,
     isLoadingMore: Boolean,
+    endReached: Boolean,
     onLoadMore: () -> Unit
 ) {
     LazyColumn(
@@ -133,9 +135,12 @@ fun ExchangesList(
         verticalArrangement = Arrangement.spacedBy(ListUIConstants.ITEM_SPACING),
         contentPadding = PaddingValues(ListUIConstants.SCREEN_PADDING)
     ) {
-        itemsIndexed(exchanges) { index, exchange ->
-            if (index >= exchanges.size - 1) {
-                LaunchedEffect(Unit) {
+        itemsIndexed(
+            items = exchanges,
+            key = { _, exchange -> exchange.id }
+        ) { index, exchange ->
+            if (index >= exchanges.size - ListUIConstants.PAGINATION_BUFFER && !isLoadingMore && !endReached) {
+                LaunchedEffect(exchanges.size) {
                     onLoadMore()
                 }
             }
@@ -154,19 +159,8 @@ fun ExchangesList(
         }
 
         if (isLoadingMore) {
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(ListUIConstants.SCREEN_PADDING),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(ListUIConstants.PAGINATION_INDICATOR_SIZE),
-                        strokeWidth = ListUIConstants.PAGINATION_INDICATOR_STROKE,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+            items(ListUIConstants.PAGINATION_SHIMMER_COUNT) {
+                ExchangeListItemShimmer()
             }
         }
     }
@@ -248,7 +242,7 @@ private fun ExchangeVolumeStat(volumeUsd: Double) {
             color = MaterialTheme.colorScheme.secondary
         )
         Text(
-            text = "24h Volume",
+            text = "Spot Volume",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -262,8 +256,8 @@ private object ListUIConstants {
     val CARD_ELEVATION = 2.dp
     val LOGO_CONTAINER_SIZE = 52.dp
     const val LOGO_ALPHA = 0.2f
-    val PAGINATION_INDICATOR_SIZE = 24.dp
-    val PAGINATION_INDICATOR_STROKE = 2.dp
     const val ANIMATION_OFFSET_FACTOR = 50
     const val PRICE_FONT_SIZE = 14
+    const val PAGINATION_BUFFER = 5
+    const val PAGINATION_SHIMMER_COUNT = 3
 }

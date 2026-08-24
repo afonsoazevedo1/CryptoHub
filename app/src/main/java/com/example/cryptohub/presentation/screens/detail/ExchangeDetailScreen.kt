@@ -248,20 +248,33 @@ private fun WebsiteLink(
 
 @Composable
 private fun ExchangeStatsSection(exchange: ExchangeDetail) {
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(DetailUIConstants.STAT_CARD_SPACING)
+        verticalArrangement = Arrangement.spacedBy(DetailUIConstants.STAT_CARD_SPACING)
     ) {
-        InfoStatCard(
-            label = "Maker Fee",
-            value = "${exchange.makerFee ?: 0.0}%",
-            modifier = Modifier.weight(1f)
-        )
-        InfoStatCard(
-            label = "Taker Fee",
-            value = "${exchange.takerFee ?: 0.0}%",
-            modifier = Modifier.weight(1f)
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(DetailUIConstants.STAT_CARD_SPACING)
+        ) {
+            InfoStatCard(
+                label = "Maker Fee",
+                value = "${exchange.makerFee ?: 0.0}%",
+                modifier = Modifier.weight(1f)
+            )
+            InfoStatCard(
+                label = "Taker Fee",
+                value = "${exchange.takerFee ?: 0.0}%",
+                modifier = Modifier.weight(1f)
+            )
+        }
+        
+        exchange.spotVolumeUsd?.let { volume ->
+            InfoStatCard(
+                label = "Spot Volume (USD)",
+                value = volume.formatUSD(),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 

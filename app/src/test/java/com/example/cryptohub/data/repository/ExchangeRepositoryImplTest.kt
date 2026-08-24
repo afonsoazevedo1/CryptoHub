@@ -134,7 +134,8 @@ class ExchangeRepositoryImplTest {
                     id = 1, 
                     name = "Binance", 
                     description = "Desc",
-                    logo = "logo_url"
+                    logo = "logo_url",
+                    spotVolumeUsd = 10000.0
                 )
             )
         )
@@ -156,6 +157,7 @@ class ExchangeRepositoryImplTest {
             val data = (result as Result.Success).data
             assertEquals("Binance", data.name)
             assertEquals("Desc", data.description)
+            assertEquals(10000.0, data.spotVolumeUsd!!, 0.0)
             awaitComplete()
         }
     }

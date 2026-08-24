@@ -50,10 +50,11 @@ class ExchangeListViewModel(
                     }
                     is Result.Success -> {
                         currentStart += pageSize
+                        val newExchanges = (_uiState.value.exchanges + result.data).distinctBy { it.id }
                         _uiState.value.copy(
                             isLoading = false,
                             isPaginationLoading = false,
-                            exchanges = _uiState.value.exchanges + result.data,
+                            exchanges = newExchanges,
                             error = null,
                             endReached = result.data.size < pageSize
                         )
@@ -76,6 +77,6 @@ class ExchangeListViewModel(
 
     companion object {
         private const val INITIAL_PAGE_START = 1
-        private const val PAGE_SIZE = 8
+        private const val PAGE_SIZE = 20
     }
 }

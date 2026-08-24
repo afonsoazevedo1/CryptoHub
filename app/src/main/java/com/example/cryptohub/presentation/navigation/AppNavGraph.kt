@@ -20,7 +20,7 @@ fun AppNavGraph(navController: NavHostController) {
                         Routes.ExchangeDetail(
                             id = exchange.id,
                             name = exchange.name,
-                            volume = exchange.spotVolumeUsd,
+                            spotVolumeUsd = exchange.spotVolumeUsd,
                             dateLaunched = exchange.dateLaunched
                         )
                     )

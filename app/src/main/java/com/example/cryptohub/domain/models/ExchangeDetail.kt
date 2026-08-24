@@ -10,6 +10,7 @@ data class ExchangeDetail(
     val website: String?,
     val makerFee: Double?,
     val takerFee: Double?,
+    val spotVolumeUsd: Double? = null,
     val dateLaunched: String?,
     val currencies: List<Coin> = emptyList()
 )

@@ -65,10 +65,10 @@ class ExchangeRepositoryImpl(
         val exchanges = mapResponse.data.map { mapDto ->
             val detailDto = infoResponse.data[mapDto.id.toString()]
             
-            // Prioritize volume from info response
+            // Strictly use spot_volume_usd if available from info response
             val volume = detailDto?.spotVolumeUsd 
-                ?: detailDto?.volume24h 
                 ?: mapDto.spotVolumeUsd 
+                ?: detailDto?.volume24h 
                 ?: 0.0
                 
             mapDto.toExchangeListItem().copy(

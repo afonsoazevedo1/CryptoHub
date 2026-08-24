@@ -40,6 +40,7 @@ class ExchangeDetailViewModel(
         website = null,
         makerFee = null,
         takerFee = null,
+        spotVolumeUsd = route.spotVolumeUsd,
         dateLaunched = route.dateLaunched,
         currencies = emptyList()
     )

@@ -29,6 +29,7 @@ fun ExchangeDto.toExchangeDetail(coins: List<Coin> = emptyList()): ExchangeDetai
         website = urls?.website?.firstOrNull(),
         makerFee = makerFee,
         takerFee = takerFee,
+        spotVolumeUsd = spotVolumeUsd,
         dateLaunched = dateLaunched ?: firstHistoricalData,
         currencies = coins
     )

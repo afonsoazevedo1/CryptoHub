@@ -26,6 +26,7 @@ class ExchangeListScreenTest {
                     exchanges = exchanges,
                     onExchangeClick = {},
                     isLoadingMore = false,
+                    endReached = false,
                     onLoadMore = {}
                 )
             }

@@ -68,6 +68,7 @@ class ExchangeMapperTest {
             urls = UrlsDto(website = listOf("website_url")),
             makerFee = 0.1,
             takerFee = 0.2,
+            spotVolumeUsd = 5000000.0,
             dateLaunched = "2017-07-14"
         )
         val coins = listOf(Coin(1, "Bitcoin", "BTC", 50000.0))
@@ -81,6 +82,7 @@ class ExchangeMapperTest {
         assertEquals("website_url", result.website)
         assertEquals(0.1, result.makerFee!!, 0.0)
         assertEquals(0.2, result.takerFee!!, 0.0)
+        assertEquals(5000000.0, result.spotVolumeUsd!!, 0.0)
         assertEquals("2017-07-14", result.dateLaunched)
         assertEquals(coins, result.currencies)
     }
